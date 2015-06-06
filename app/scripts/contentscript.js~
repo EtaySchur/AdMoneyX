@@ -1,0 +1,109 @@
+'use strict';
+
+window.addEventListener('load' , function(){
+   var app = angular.module ('AdMoney' , []);
+   var parseManager = new ParseManager();
+   var imagesArray = [];
+   var maxSize;
+
+   var html = document.querySelector('html');
+    html.setAttribute('ng-app', '');
+    html.setAttribute('ng-csp', '');
+
+    var Images = Parse.Object.extend("Images");
+    var query = new Parse.Query(Images);
+    query.find({
+        success: function(images) {
+            // The object was retrieved successfully.
+             imagesArray = images;
+            maxSize = images.length;
+            console.log(imagesArray);
+            var holders = $( "div[id*='holder']");
+            console.log(holders);
+            if(holders){
+                $(holders).each(function(){
+                    var originalWidth = $(this).width();
+                    var originalHeight = $(this).height();
+                    var image = document.createElement('img');
+                    $(image).attr("src" , imagesArray[getRandomInt(0,maxSize)].attributes.imageFile._url);
+                    $(image).width(originalWidth);
+                    $(image).height(originalHeight);
+                    $(this).html(image);
+                });
+            }
+
+
+            var ad_holders = $( "div[class*='_ad_']" );
+            console.log(holders);
+            if(ad_holders){
+                $(ad_holders).each(function(){
+                    var originalWidth = $(this).width();
+                    var originalHeight = $(this).height();
+                    var image = document.createElement('img');
+                    $(image).attr("src" , imagesArray[getRandomInt(0,maxSize)].attributes.imageFile._url);
+                    $(image).width(originalWidth);
+                    $(image).height(originalHeight);
+                    $(this).html(image);
+                });
+            }
+
+
+            var ad_id_holders = $( "div[id*='_ad_']" );
+
+            if(ad_id_holders){
+                console.log(holders);
+                $(ad_id_holders).each(function(){
+                    var originalWidth = $(this).width();
+                    var originalHeight = $(this).height();
+                    var image = document.createElement('img');
+                    $(image).attr("src" , imagesArray[getRandomInt(0,maxSize)].attributes.imageFile._url);
+                    $(image).width(originalWidth);
+                    $(image).height(originalHeight);
+                    $(this).html(image);
+                });
+
+
+            }
+
+
+        },
+        error: function(object, error) {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and description.
+        }
+    });
+
+    function getRandomInt(min, max) {
+        max = max - 1;
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+/*
+    var viewport = document.getElementById('viewport');
+    viewport.setAttribute('ng-controller' , 'MainController');
+
+    app.controller('MainController' , function($scope){
+
+    });
+
+    var myDirective = document.createElement('div');
+    myDirective.setAttribute('my-directive' , '');
+    document.querySelector('#viewport').appendChild(myDirective);
+
+
+    app.directive('myDirective' , ['$sce' ,  function($sce){
+       return {
+           restrict : 'EA' ,
+           replace : true ,
+           template : $sce.trustAsResourceUrl(chrome.extension.getURL('templates/ad_money.html'))
+       };
+    }]);
+*/
+
+
+
+    angular.bootstrap(html , ['AdMoney'] , []);
+
+
+
+});
