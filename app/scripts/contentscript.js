@@ -7,10 +7,6 @@ var haveBronze = false;
 var page = 1;
 
 window.addEventListener('load' , function(){
-
-
-
-
     var html = document.querySelector('html');
     var body = document.querySelector('body');
     //var test = document.querySelector('.dyother');
@@ -18,7 +14,7 @@ window.addEventListener('load' , function(){
     //top_banner
     var googleHolders = $( "div[id*='google']");
     var randomHolder = $("div[id*='holder']");
-    var adsHolder = $("div[id*='fuadfuad']");
+    var adsHolder = $("div[id*='Google']");
     //var adHolder = $("div[class*='adBox']");
     var tempholders = $.merge(googleHolders , randomHolder);
     var holders = $.merge(adsHolder , tempholders);
@@ -27,11 +23,11 @@ window.addEventListener('load' , function(){
     var headerIndex = -1;
     var sideLeftIndex = -1;
     var sideRightIndex = -1;
-
+    console.log("Holders Size ",holders.length)
 
     for(var i = 0 ; i < holders.length ; i++){
-      // $(holders[i]).html('Loading');
-         console.log("Height ? ",$(holders[i]).innerHeight());
+        //$(holders[i]).html('Loading');
+         console.log("Height ? ",$(holders[i]).innerHeight() , holders[i]);
         var height = $(holders[i]).innerHeight();
         var width = $(holders[i]).innerWidth();
         if(height > maxHeight){
@@ -67,6 +63,7 @@ window.addEventListener('load' , function(){
             isInit = true;
             var localUrl = "http://local.kampyle.com/code_tests/SystemAdmin/ClientService.php";
             var ec2Uel = "http://fuadec2.kampyle.com/AdMoneyMain/Web/ClientService.php";
+            var prefix = "http://fuadec2.kampyle.com/AdMoneyMain/Web/";
             console.log('init');
             var myData = {};
             myData.action = 'getUsersData';
@@ -108,7 +105,7 @@ window.addEventListener('load' , function(){
                                             console.log(dataArray);
                                             $.ajax({
                                                 type: "POST",
-                                                url: 'https://local.kampyle.com/ClientService.php',
+                                                url: ec2Uel,
                                                 data: {"data":dataArray , "action":"updateCampaignRotation"},
                                                 success: function(data){
                                                 }
@@ -136,7 +133,7 @@ window.addEventListener('load' , function(){
                                             console.log(dataArray);
                                             $.ajax({
                                                 type: "POST",
-                                                url: 'https://local.kampyle.com/ClientService.php',
+                                                url: ec2Uel,
                                                 data: {"data":dataArray , "action":"updateCampaignRotation"},
                                                 success: function(data){
                                                 }
@@ -164,7 +161,7 @@ window.addEventListener('load' , function(){
                                             console.log(dataArray);
                                             $.ajax({
                                                 type: "POST",
-                                                url: 'https://local.kampyle.com/ClientService.php',
+                                                url: ec2Uel,
                                                 data: {"data":dataArray , "action":"updateCampaignRotation"},
                                                 success: function(data){
                                                 }
@@ -266,7 +263,7 @@ window.addEventListener('load' , function(){
                              } */
                             if(resource.type == "SMALL_IMAGE"){
                                 smallImage = resource;
-                                //replaceSmallImage();
+                                replaceSmallImage();
                                 console.log("Selected SMALLLLLLL Resource ");
                                 console.log(resource);
 
@@ -298,7 +295,7 @@ window.addEventListener('load' , function(){
                         var image = document.createElement('img');
 
 
-                        $(image).attr("src" , "https://local.kampyle.com/code_tests/SystemAdmin/static/images/"
+                        $(image).attr("src" , prefix+"static/images/"
                             +mediumSideImage.company_id
                             +"/"+mediumSideImage.campaign_id
                             +"/"+mediumSideImage.package_id
@@ -331,43 +328,44 @@ window.addEventListener('load' , function(){
                             if(i != sideLeftIndex && i != headerIndex){
                                 var originalWidth = $(holders[i]).width();
                                 var originalHeight = $(holders[i]).height();
-                                console.log("This IS HOLDER");
-                                console.log(holders[i]);
-                                var clickButton = document.createElement('button');
-                                $(clickButton).addClass('btn btn-primary adMoneyIcon');
-                                $(clickButton).text('I want It :)');
-                                $(clickButton).attr('ng-show' , 'showSideIcon == true');
+                                if(originalHeight > 50 && originalWidth > 50){
+                                    var clickButton = document.createElement('button');
+                                    $(clickButton).addClass('btn btn-primary adMoneyIcon');
+                                    $(clickButton).text('I want It :)');
+                                    $(clickButton).attr('ng-show' , 'showSideIcon == true');
 
-                                var clickIcon = document.createElement('span');
-                                $(clickIcon).addClass('glyphicon glyphicon-thumbs-up');
+                                    var clickIcon = document.createElement('span');
+                                    $(clickIcon).addClass('glyphicon glyphicon-thumbs-up');
 
-                                $(clickButton).append(clickIcon);
+                                    $(clickButton).append(clickIcon);
 
-                                // ??
-                                //var innerIframe = $(googleHolders[sideLeftIndex]).find('iframe');
-                                //$(innerIframe).attr("ng-click" ,"clickMe()");
+                                    // ??
+                                    //var innerIframe = $(googleHolders[sideLeftIndex]).find('iframe');
+                                    //$(innerIframe).attr("ng-click" ,"clickMe()");
 
-                                var image = document.createElement('img');
+                                    var image = document.createElement('img');
 
 
-                                $(image).attr("src" , "https://local.kampyle.com/code_tests/SystemAdmin/static/images/"
-                                    +smallImage.company_id
-                                    +"/"+smallImage.campaign_id
-                                    +"/"+smallImage.package_id
-                                    +"/SMALL_IMAGE/"
-                                    +smallImage.title);
-                                $scope.selectedSmallImage = smallImage;
-                                //$(googleHolders[sideLeftIndex]).attr("ng-click" ,"clickMe(selectedMediumSideImage)");
-                                $(holders[i]).attr("ng-model" ,'selectedSmallImage');
-                                $(clickButton).attr("ng-click" ,"clickMe(selectedSmallImage)");
-                                $(image).width(originalWidth);
-                                $(image).height(originalHeight);
-                                $(holders[i]).css('position' , 'relative');
-                                $(holders[i]).attr('ng-mouseenter' , 'showSideIcon = true');
-                                $(holders[i]).attr('ng-mouseleave' , 'showSideIcon = false');
-                                $(holders[i]).attr('ng-init' , 'showSideIcon = false');
-                                $(holders[i]).html(image);
-                                $(holders[i]).append(clickButton);
+                                    $(image).attr("src" , prefix+"static/images/"
+                                        +smallImage.company_id
+                                        +"/"+smallImage.campaign_id
+                                        +"/"+smallImage.package_id
+                                        +"/SMALL_IMAGE/"
+                                        +smallImage.title);
+                                    $scope.selectedSmallImage = smallImage;
+                                    //$(googleHolders[sideLeftIndex]).attr("ng-click" ,"clickMe(selectedMediumSideImage)");
+                                    $(holders[i]).attr("ng-model" ,'selectedSmallImage');
+                                    $(clickButton).attr("ng-click" ,"clickMe(selectedSmallImage)");
+                                    $(image).width(originalWidth);
+                                    $(image).height(originalHeight);
+                                    $(holders[i]).css('position' , 'relative');
+                                    $(holders[i]).attr('ng-mouseenter' , 'showSideIcon = true');
+                                    $(holders[i]).attr('ng-mouseleave' , 'showSideIcon = false');
+                                    $(holders[i]).attr('ng-init' , 'showSideIcon = false');
+                                    $(holders[i]).html(image);
+                                    $(holders[i]).append(clickButton);
+                                }
+
                             }
                         }
 
@@ -393,7 +391,7 @@ window.addEventListener('load' , function(){
 
                         $(clickButton).append(clickIcon);
 
-                        $(image).attr("src" , "https://local.kampyle.com/code_tests/SystemAdmin/static/images/"
+                        $(image).attr("src" , prefix+"static/images/"
                             +headerImage.company_id
                             +"/"+headerImage.campaign_id
                             +"/"+headerImage.package_id
